@@ -6,24 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Fee extends Model
+class Guardian extends Model
 {
     use SoftDeletes;
-    protected $fillable = [
-        'fee_type',
-        'amount',
-        'due_date',
-        'paid_date',
-        'status',
-        'receipt_number',
-        'note',
-        'student_id'
-    ];
 
-    protected $casts = [
-        'due_date' => 'date',
-        'paid_date' => 'date',
-        'amount' => 'decimal:2'
+    protected $table = 'parents';
+
+    protected $fillable = [
+        'guardian_name',
+        'email',
+        'phone',
+        'address',
+        'relationship',
+        'student_id'
     ];
 
     public function student(): BelongsTo
