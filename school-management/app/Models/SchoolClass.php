@@ -20,7 +20,7 @@ class SchoolClass extends Model
         'class_teacher_id'
     ];
 
-    public function ClassTeacher(): BelongsTo
+    public function classTeacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class, 'class_teacher_id'); // a tanár aki osztályfőnök, idegen kulcs a class_teacher_id mezőben
     }
