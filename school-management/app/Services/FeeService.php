@@ -9,6 +9,20 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FeeService
 {
+    // Az összes díj lekérdezése.. Admin dashboardhoz tökéletes..
+    public function getAllFees(int $perPage = 15): LengthAwarePaginator
+    {
+        return Fee::with(['student'])
+            ->orderBy('due_date', 'desc')
+            ->paginate($perPage);
+    }
+
+    // Egy díj lekérdezése id alapján..
+    public function getFeeById(int $id): Fee
+    {
+        return Fee::with(['student'])->findOrFail($id);
+    }
+
     // Ez egy diáknak az összes dijának a lekérdezése
     public function getStudentFee(Student $student): Collection
     {
@@ -40,6 +54,18 @@ class FeeService
         return Fee::create($data);
     }
 
+    // Díj adatainak a frissitése..
+    public function updateFee(Fee $fee, array $data): Fee
+    {
+        $fee->update($data);
+        return $fee->fresh();
+    }
+
+    // Dij törlése..
+    public function deleteFee(Fee $fee): void
+    {
+        $fee->delete();
+    }
 
     // Egyedi bizonylatszám generálása..
     private function generateReceiptNumber(): string

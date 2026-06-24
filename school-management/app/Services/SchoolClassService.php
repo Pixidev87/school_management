@@ -54,7 +54,7 @@ class SchoolClassService
     }
 
     // Egy osztály diákjainak a lekérdezése.. Csak azért mert nem mindig kell az összes adat, néha elég a diáklista
-    public function getStudentsClass(SchoolClass $schoolClass): Collection
+    public function getStudentsByClass(SchoolClass $schoolClass): Collection
     {
         return $schoolClass->students()->orderBy('name')->get();
     }

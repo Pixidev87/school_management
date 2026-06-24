@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Student;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Ramsey\Collection\Collection;
 
 class StudentService
 {
@@ -29,7 +30,7 @@ class StudentService
     }
 
 
-    // Új diák létrehozása.. 
+    // Új diák létrehozása..
     public function createStudent(array $data): Student
     {
         $data['roll_number'] = $this->generateRollNumber();
@@ -67,5 +68,12 @@ class StudentService
     public function deleteStudent(Student $student): void
     {
         $student->delete();
+    }
+
+    public function getStudentsByClass(int $classId): Collection
+    {
+        return Student::where('class_id', $classId)
+            ->orderBy('name')
+            ->get();
     }
 }

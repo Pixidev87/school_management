@@ -52,4 +52,30 @@ class NotificationService
             $query->where('user_id', $user->id);
         })->count();
     }
+
+    // Egy értesítés lekérdezése id alapján.. Ez a Controllernek a show(), update() és destroy() metódusához lehet szükséges..
+    public function getNotificationById(int $id): Notification
+    {
+        return Notification::with(['creator', 'reads'])->findOrFail($id);
+    }
+
+    // Értesítés törlése..
+    public function deleteNotification(Notification $notification): void
+    {
+        $notification->delete();
+    }
+
+    // Egy felhasználó értesítése (olvasott, olvasatlan).. withCount(), hogy a frontend lássa hány felhasználó olvasta el az értesítést..
+    public function getUserNotifications(User $user, int $perPage = 15): LengthAwarePaginator
+    {
+        return Notification::withCount('reads')
+            ->where('target', 'all')
+            ->orWhere(function ($query) use ($user) {
+                $query->where('target', 'students')
+                    ->orWhere('target', 'teachers')
+                    ->orWhere('target', 'parents');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
 }

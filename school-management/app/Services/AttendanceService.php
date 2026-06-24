@@ -11,6 +11,18 @@ use Illuminate\Support\Facades\DB;
 class AttendanceService
 {
 
+    // Osztály lekérdezése id alapján..
+    public function getClassById(int $id): SchoolClass
+    {
+        return SchoolClass::findOrFail($id);
+    }
+
+    //Diák lekérdezése id alapján..
+    public function getStudentById(int $id): Student
+    {
+        return Student::findOrFail($id);
+    }
+
     // Egy osztály rögzítése egy adott napra..
     public function recordClassAttendance(SchoolClass $schoolClass, string $date, array $attendanceData): Collection
     {
@@ -39,6 +51,28 @@ class AttendanceService
                 ]);
             });
 
+            return $records;
+        });
+    }
+
+    // Egy tanár jelenlétének rögzítése egy adott napra..
+    public function recordTeacherAttendance(SchoolClass $schoolClass, string $date, array $attendanceData): Collection
+    {
+        return DB::transaction(function () use ($schoolClass, $date, $attendanceData) {
+            Attendance::where('class_id', $schoolClass->id)
+                ->where('date', $date)
+                ->whereNotNull('teacher_id')
+                ->delete();
+
+            $records = collect($attendanceData)->map(function ($item) use ($schoolClass, $date) {
+                return Attendance::create([
+                    'teacher_id' => $item['teacher_id'],
+                    'class_id' => $schoolClass->id,
+                    'date' => $date,
+                    'status' => $item['status'],
+                    'note' => $item['note'] ?? null,
+                ]);
+            });
             return $records;
         });
     }
@@ -98,5 +132,23 @@ class AttendanceService
             ->whereNotNull('student_id')
             ->orderBy('student_id')
             ->get();
+    }
+
+    // Egy osztály összes jelenléti bejegyzése lapozás nélkül..
+    public function getClassAttendaceHistory(SchoolClass $schoolClass, ?string $from = null, ?string $to = null): Collection
+    {
+        $query = Attendance::with(['student'])
+            ->where('class_id', $schoolClass->id)
+            ->whereNotNull('student_id');
+
+        if ($from) {
+            $query->where('date', '>=', $from);
+        }
+
+        if ($to) {
+            $query->where('date', '<=', $to);
+        }
+
+        return $query->orderBy('date', 'desc')->get();
     }
 }

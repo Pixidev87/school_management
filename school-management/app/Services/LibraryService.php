@@ -25,6 +25,59 @@ class LibraryService
         return $query->orderBy('title')->paginate($perPage);
     }
 
+    // Egy könyv lekérdezése id alapján..
+    public function getBookById(int $id): Library_book
+    {
+        return Library_book::with([
+            'issues.student',
+            'issues.teacher'
+        ])->findOrFail($id);
+    }
+
+    // Új könyv létrehozása..
+    public function createBook(array $data): Library_book
+    {
+        return Library_book::create($data);
+    }
+
+    // Könyv adatainak a frissítése..
+    public function updateBook(Library_book $library_book, array $data): Library_book
+    {
+        $library_book->update($data);
+        return $library_book->fresh();
+    }
+
+    // Egy könyv törlése..
+    public function deleteBook(Library_book $library_book): void
+    {
+        $library_book->delete();
+    }
+
+    // Egy kölcsönzés lekérése id alapján.. 
+    public function getIssuesById(int $id): Library_issues
+    {
+        return Library_issues::with(['book', 'student', 'teacher'])->findOrFail($id);
+    }
+
+    // Aktiv kölcsönzések.. Ezt az admin láthatja ki,mit kölcsönzött ki és mikor kell visszahozni..
+    public function getActiveIssues(int $perPage = 15): LengthAwarePaginator
+    {
+        return Library_issues::with(['book', 'student', 'teacher'])
+            ->where('status', 'issued')
+            ->orderBy('due_date')
+            ->paginate($perPage);
+    }
+
+    // Lejárt kölcsönzések lekérése.. 
+    public function getOverdueIssues(int $perPage = 15): LengthAwarePaginator
+    {
+        return Library_issues::with(['book', 'student', 'teacher'])
+            ->where('status', 'issued')
+            ->where('due_date', '<', now())
+            ->orderBy('due_date')
+            ->paginate($perPage);
+    }
+
     // könyv kölcsönzése..
     // transaction(), mert ha a könyv kölcsönzése sikeres és a csökkentés nem akkor nem müködhet. így vagy mindkettő vagy egyik sem..
     public function issueBook(Library_book $book, array $data): Library_issues
