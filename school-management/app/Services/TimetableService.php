@@ -43,8 +43,14 @@ class TimetableService
     }
 
     // Órarend törlése..
-    public function deleteTimetabla(Timetable $timetable): void
+    public function deleteTimetable(Timetable $timetable): void
     {
         $timetable->delete();
+    }
+
+    public function getTimetableById(int $id): Timetable
+    {
+        return Timetable::with(['subject', 'teacher', 'schoolClass'])
+            ->findOrFail($id);
     }
 }

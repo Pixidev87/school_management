@@ -21,19 +21,39 @@ class AttendanceController extends Controller
         private StudentService $studentService
     ) {}
 
-    public function storeClass(StoreAttendanceRequest $request): AnonymousResourceCollection
+    // Diák jelenlétének tömeges rögzítése egy osztályban..
+    public function storeStudents(StoreAttendanceRequest $request): AnonymousResourceCollection
     {
         $class = $this->attendanceService->getClassById($request->input('class_id'));
 
         $attendances = $this->attendanceService->recordClassAttendance(
             $class,
             $request->input('date'),
-            $request->input('attendance')
+            $request->input('attendances')
         );
 
         return AttendanceResource::collection($attendances);
     }
 
+    // Osztály jelenlétének lekérdezése egy adott napra..
+    public function byClass(int $classId, Request $request): AnonymousResourceCollection
+    {
+        $request->validate([
+            'date' => 'required|date|date_format:Y-m-d'
+        ]);
+
+        $class = $this->attendanceService->getClassById($classId);
+
+        $attendances = $this->attendanceService->getClassAttendanceByDate(
+            $class,
+            $request->input('date')
+        );
+
+        return AttendanceResource::collection($attendances);
+    }
+
+
+    // Tanár jelenléti tömeges rögzítése..
     public function storeTeachers(StoreTeacherAttendanceRequest $request): AnonymousResourceCollection
     {
         $class = $this->attendanceService->getClassById($request->input('class_id'));
@@ -47,8 +67,14 @@ class AttendanceController extends Controller
         return AttendanceResource::collection($attendances);
     }
 
-    public function studentStats(int $studentId): JsonResponse
+    // Egy diák jelenléti statisztikája..
+    public function studentStats(int $studentId, Request $request): JsonResponse
     {
+
+        $request->validate([
+            'from' => 'nullable|date|date_format:Y-m-d',
+            'to' => 'nullable|date|date_format:Y-m-d|after_or_equal:from',
+        ]);
 
         $student = $this->studentService->getStudentById($studentId);
 
@@ -66,5 +92,24 @@ class AttendanceController extends Controller
         return response()->json([
             'data' => $stats
         ]);
+    }
+
+    // Egy osztály teljes jelenléti előzménye..
+    public function classHistory(int $classId, Request $request): AnonymousResourceCollection
+    {
+        $request->validate([
+            'from' => 'nullable|date|date_format:Y-m-d',
+            'to'   => 'nullable|date|date_format:Y-m-d|after_or_equal:from',
+        ]);
+
+        $class = $this->attendanceService->getClassById($classId);
+
+        $attendance = $this->attendanceService->getClassAttendaceHistory(
+            $class,
+            $request->input('from'),
+            $request->input('to')
+        );
+
+        return AttendanceResource::collection($attendance);
     }
 }

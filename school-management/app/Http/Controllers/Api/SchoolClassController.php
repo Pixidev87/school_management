@@ -68,7 +68,7 @@ class SchoolClassController extends Controller
     public function students(int $id): AnonymousResourceCollection
     {
         $class = $this->schoolClassService->getClassById($id);
-        $students = $this->schoolClassService->getStudentsClass($class);
+        $students = $this->schoolClassService->getStudentsByClass($class);
 
         return StudentResource::collection($students);
     }

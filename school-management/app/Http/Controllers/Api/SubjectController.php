@@ -57,4 +57,10 @@ class SubjectController extends Controller
             'message' => 'Tantárgy sikeresen törölve!'
         ]);
     }
+
+    public function byTeacher(int $teacherId): AnonymousResourceCollection
+    {
+        $subjects = $this->subjectService->getSubjectByTeacher($teacherId);
+        return SubjectResource::collection($subjects);
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTeacherRequest;
 use App\Http\Requests\UpdateTeacherRequest;
 use App\Http\Resources\TeacherResource;
+use App\Http\Resources\TimetableResource;
 use App\Services\TeacherService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -57,5 +58,18 @@ class TeacherController extends Controller
         return response()->json([
             'message' => 'Tanár sikeresen törölve!'
         ]);
+    }
+
+    // Egy tanár napi beosztása.. Itt elég validálni, ehhez nem kell külön form request..
+    public function schedule(int $id, Request $request): AnonymousResourceCollection
+    {
+        $request->validate([
+            'day' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday'
+        ]);
+
+        $teacher = $this->teacherService->getTeacherById($id);
+        $schedule = $this->teacherService->getTeacherScheduleByDay($teacher, $request->input('day'));
+
+        return TimetableResource::collection($schedule);
     }
 }
