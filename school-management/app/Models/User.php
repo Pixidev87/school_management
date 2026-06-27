@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -31,6 +31,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Szerepkör ellenőrző metódusok.. a form request authorize() metódusban használjuk ellenőrzésre..
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === 'teacher';
+    }
+
+    public function isParent(): bool
+    {
+        return $this->role === 'parent';
+    }
+
+    // Több szerepkör ellenőrzése..
+    public function hasRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
+
+    // Kapcsolatok..
 
     public function notification(): HasMany
     {

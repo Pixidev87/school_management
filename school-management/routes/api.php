@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\FeeController;
 use App\Http\Controllers\Api\LibraryController;
@@ -112,5 +113,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('{id}/read', [NotificationController::class, 'markAsRead'])->name('read');
         Route::get('meta/unread-count', [NotificationController::class, 'unreadCount'])->name('unread.count');
         Route::get('meta/user', [NotificationController::class, 'userNotifications'])->name('user');
+    });
+
+    // Be és kijelentkezés..
+
+    // Publikus..
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::post('login', [AuthController::class, 'login'])
+            ->name('login');
+    });
+
+    // Védett (nem publikus..)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::prefix('auth')->name('auth.')->group(function () {
+            Route::get('me', [AuthController::class, 'me'])->name('me');
+            Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+            Route::post('logout-all', [AuthController::class, 'logoutAll'])->name('logout-all');
+        });
     });
 });
