@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Exam;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,22 @@ class StoreExamResultRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user = $this->user();
+
+        // Admin az mindent megtehet..
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ($user->isTeacher()) {
+            $exam = Exam::find($this->route('id'));
+
+            if (!$exam) {
+                return false;
+            }
+            return $user->teacher?->id === $exam->subject->teacher_id;
+        }
+        return false;
     }
 
     /**

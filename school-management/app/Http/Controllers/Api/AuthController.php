@@ -54,6 +54,14 @@ class AuthController extends Controller
     // Bejelentkezett felhasználó adatai..
     public function me(Request $request): UserResource
     {
-        return new UserResource($request->user());
+        $user = $request->user();
+
+        $user->load(match (true) {
+            $user->isTeacher() => 'teacher',
+            $user->isParent() => 'guardian',
+            default => [],
+        });
+
+        return new UserResource($user);
     }
 }

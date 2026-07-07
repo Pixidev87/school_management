@@ -55,4 +55,9 @@ class Student extends Model
     {
         return $this->hasMany(Library_issues::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
