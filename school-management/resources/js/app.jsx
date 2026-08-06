@@ -1,14 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import '../css/app.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "../css/app.css";
+import { AuthProvider } from "./context/AuthContext";
+import AppRoutes from "./routes/AppRoutes";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 40 * 1000,
+            retry: 1,
+        },
+    },
+});
 
 function App() {
     return (
-        <div className="container mt-5">
-            <h1>School Management App</h1>
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <AppRoutes />
+            </AuthProvider>
+        </QueryClientProvider>
     );
 }
 
-ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+ReactDOM.createRoot(document.getElementById("app")).render(<App />);

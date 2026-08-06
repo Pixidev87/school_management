@@ -49,9 +49,9 @@ export function AuthProvider({ children }) {
         loading,
         login,
         logout,
-        isAdmin: (user?.role = "admin"),
-        isTeacher: (user?.role = "teacher"),
-        isParent: (user?.role = "parent"),
+        isAdmin: user?.role === "admin",
+        isTeacher: user?.role === "teacher",
+        isParent: user?.role === "parent",
     };
 
     return (

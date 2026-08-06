@@ -15,6 +15,8 @@ api.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
+    return config;
 });
 
 // ha 401-et dob a szervez vissza, akkor kijelentkeztetjük a felhasználót és átirányítom a login oldalra..
