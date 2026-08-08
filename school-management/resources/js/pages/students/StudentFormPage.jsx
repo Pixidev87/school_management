@@ -1,0 +1,221 @@
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useClasses } from "../../hooks/useClasses";
+import {
+    useStudent,
+    useCreateStudent,
+    useUpdateStudent,
+} from "../../hooks/useStudents";
+
+export default function StudentFormPage() {
+    const { id } = useParams();
+    const isEditMode = Boolean(id);
+    const navigate = useNavigate();
+
+    const [serverError, setServerError] = useState(null);
+
+    const { data: classesData } = useClasses();
+    const { data: student, isLoading: studentLoading } = useStudent(id);
+
+    const createStudent = useCreateStudent();
+    const updateStudent = useUpdateStudent(id);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm();
+
+    useEffect(() => {
+        if (isEditMode && student) {
+            reset({
+                name: student.name,
+                email: student.email,
+                phone: student.phone ?? "",
+                address: student.address ?? "",
+                date_of_birth: student.date_of_birth ?? "",
+                gender: student.gender ?? "",
+                class_id: student.school_class?.id ?? "",
+            });
+        }
+    }, [isEditMode, student, reset]);
+
+    async function onSubmit(data) {
+        setServerError(null);
+
+        try {
+            if (isEditMode) {
+                await updateStudent.mutateAsync(data);
+            } else {
+                await createStudent.mutateAsync(data);
+            }
+
+            navigate("/students");
+        } catch (error) {
+            const validationErrors = error.response?.data?.errors;
+            const firstError = validationErrors
+                ? Object.values(validationErrors)[0][0]
+                : null;
+
+            setServerError(
+                firstError ||
+                    error.response?.data?.message ||
+                    "Hiba történt a mentés során.",
+            );
+        }
+    }
+
+    const isSubmitting = createStudent.isPending || updateStudent.isPending;
+
+    if (isEditMode && studentLoading) {
+        return (
+            <div className="text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Betöltés...</span>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <h1 className="h3 mb-4">
+                {isEditMode ? "Diák szerkesztése" : "Új diák felvétele"}
+            </h1>
+
+            <div className="card shadow-sm">
+                <div className="card-body p-4">
+                    {serverError && (
+                        <div className="alert alert-danger">{serverError}</div>
+                    )}
+
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Név</label>
+                                <input
+                                    className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                                    {...register("name", {
+                                        required: "A név megadása kötelező.",
+                                    })}
+                                />
+                                {errors.name && (
+                                    <div className="invalid-feedback">
+                                        {errors.name.message}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                                    {...register("email", {
+                                        required:
+                                            "Az email cím megadása kötelező.",
+                                    })}
+                                />
+                                {errors.email && (
+                                    <div className="invalid-feedback">
+                                        {errors.email.message}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Telefonszám
+                                </label>
+                                <input
+                                    className="form-control"
+                                    {...register("phone")}
+                                />
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Osztály</label>
+                                <select
+                                    className={`form-select ${errors.class_id ? "is-invalid" : ""}`}
+                                    {...register("class_id", {
+                                        required:
+                                            "Az osztály kiválasztása kötelező.",
+                                    })}
+                                >
+                                    <option value="">
+                                        Válassz osztályt...
+                                    </option>
+                                    {classesData?.data.map((cls) => (
+                                        <option key={cls.id} value={cls.id}>
+                                            {cls.name}{" "}
+                                            {cls.section
+                                                ? `- ${cls.section}`
+                                                : ""}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.class_id && (
+                                    <div className="invalid-feedback">
+                                        {errors.class_id.message}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">
+                                    Születési dátum
+                                </label>
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    {...register("date_of_birth")}
+                                />
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Nem</label>
+                                <select
+                                    className="form-select"
+                                    {...register("gender")}
+                                >
+                                    <option value="">Nincs megadva</option>
+                                    <option value="male">Férfi</option>
+                                    <option value="female">Nő</option>
+                                    <option value="other">Egyéb</option>
+                                </select>
+                            </div>
+
+                            <div className="col-12 mb-3">
+                                <label className="form-label">Cím</label>
+                                <textarea
+                                    className="form-control"
+                                    rows="2"
+                                    {...register("address")}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="d-flex gap-2">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? "Mentés..." : "Mentés"}
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={() => navigate("/students")}
+                            >
+                                Mégse
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}

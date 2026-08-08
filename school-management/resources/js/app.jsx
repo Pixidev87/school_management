@@ -5,6 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../css/app.css";
 import { AuthProvider } from "./context/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const queryClient = new QueryClient({
     defaultOptions: {

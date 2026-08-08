@@ -30,7 +30,6 @@ class StoreStudentRequest extends FormRequest
             'address'       => 'nullable|string|max:500',
             'date_of_birth' => 'nullable|date|date_format:Y-m-d|before:today',  // A date_format ellenőrzi hogy a dátum YYYY-MM-DD formátumú-e
             'gender'        => 'nullable|in:male,femala,other',
-            'roll_number'   => 'required|string|max:50|unique:students,roll_number', // A roll_number egyedi kell legyen a students táblában.
             'class_id'      => 'required|exists:classes,id', // Ellenőrzi, hogy a megadott class_id létezik-e a classes táblában.
         ];
     }

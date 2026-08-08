@@ -1,31 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import LoginPage from "../pages/LoginPage";
-
-function DashboardPage() {
-    const { user, logout } = useAuth();
-
-    return (
-        <div className="container mt-5">
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>Dashboard</h1>
-                <button className="btn btn-outline-danger" onClick={logout}>
-                    Kijelentkezés
-                </button>
-            </div>
-            <p className="mt-3">
-                Üdv, <strong>{user?.name}</strong>! Szerepköröd:{" "}
-                <strong>{user?.role}</strong>
-            </p>
-        </div>
-    );
-}
+import DashboardPage from "../pages/DashboardPage";
+import Layout from "../components/layout/Layout";
+import StudentListPage from "../pages/students/StudentListPage";
+import StudentFormPage from "../pages/students/StudentFormPage";
 
 function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <div className="text-center mt-5">Betöltés...</div>;
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Betöltés...</span>
+                </div>
+            </div>
+        );
     }
 
     if (!user) {
@@ -42,13 +33,23 @@ export default function AppRoutes() {
                 <Route path="/login" element={<LoginPage />} />
 
                 <Route
-                    path="/dashboard"
                     element={
                         <ProtectedRoute>
-                            <DashboardPage />
+                            <Layout />
                         </ProtectedRoute>
                     }
-                />
+                >
+                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/students" element={<StudentListPage />} />
+                    <Route
+                        path="/students/create"
+                        element={<StudentFormPage />}
+                    />
+                    <Route
+                        path="/students/:id/edit"
+                        element={<StudentFormPage />}
+                    />
+                </Route>
 
                 <Route
                     path="/"
