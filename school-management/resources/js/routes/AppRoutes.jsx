@@ -2,9 +2,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
-import Layout from "../components/layout/Layout";
 import StudentListPage from "../pages/students/StudentListPage";
 import StudentFormPage from "../pages/students/StudentFormPage";
+import TeacherListPage from "../pages/teachers/TeacherListPage";
+import TeacherFormPage from "../pages/teachers/TeacherFormPage";
+import SchoolClassListPage from "../pages/classes/SchoolClassListPage";
+import SchoolClassFormPage from "../pages/classes/SchoolClassFormPage";
+import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
@@ -40,6 +44,7 @@ export default function AppRoutes() {
                     }
                 >
                     <Route path="/dashboard" element={<DashboardPage />} />
+
                     <Route path="/students" element={<StudentListPage />} />
                     <Route
                         path="/students/create"
@@ -48,6 +53,26 @@ export default function AppRoutes() {
                     <Route
                         path="/students/:id/edit"
                         element={<StudentFormPage />}
+                    />
+
+                    <Route path="/teachers" element={<TeacherListPage />} />
+                    <Route
+                        path="/teachers/create"
+                        element={<TeacherFormPage />}
+                    />
+                    <Route
+                        path="/teachers/:id/edit"
+                        element={<TeacherFormPage />}
+                    />
+
+                    <Route path="/classes" element={<SchoolClassListPage />} />
+                    <Route
+                        path="/classes/create"
+                        element={<SchoolClassFormPage />}
+                    />
+                    <Route
+                        path="/classes/:id/edit"
+                        element={<SchoolClassFormPage />}
                     />
                 </Route>
 

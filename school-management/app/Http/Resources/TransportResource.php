@@ -15,6 +15,7 @@ class TransportResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'route_name' => $this->route_name,
             'vehicle_number' => $this->vehicle_number,
             'driver_name' => $this->driver_name,
