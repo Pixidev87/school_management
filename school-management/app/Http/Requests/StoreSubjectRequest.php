@@ -26,7 +26,7 @@ class StoreSubjectRequest extends FormRequest
             'name'          => 'required|string|max:255',
             'code'          => 'required|string|max:50|unique:subjects,code',
             'total_periods' => 'nullable|integer|min:0',
-            'teacher_id'    => 'nullable|exists:teacher,id',
+            'teacher_id'    => 'nullable|exists:teachers,id',
         ];
     }
 
