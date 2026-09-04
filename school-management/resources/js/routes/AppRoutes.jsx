@@ -10,6 +10,7 @@ import SchoolClassListPage from "../pages/classes/SchoolClassListPage";
 import SchoolClassFormPage from "../pages/classes/SchoolClassFormPage";
 import SubjectListPage from "../pages/subjects/SubjectListPage";
 import SubjectFormPage from "../pages/subjects/SubjectFormPage";
+import AttendanceRecordPage from '../pages/attendance/AttendanceRecordPage';
 import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
@@ -76,9 +77,13 @@ export default function AppRoutes() {
                         path="/classes/:id/edit"
                         element={<SchoolClassFormPage />}
                     />
+                    
                     <Route path="/subjects" element={<SubjectListPage/>} />
                     <Route path="/subjects/create" element={<SubjectFormPage />} />
                     <Route path="/subjects/:id/edit" element={<SubjectFormPage />} />
+
+                    <Route path="/attendances" element={<AttendanceRecordPage />} />
+
                 </Route>
 
                 <Route
