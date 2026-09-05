@@ -29,7 +29,7 @@ class StoreStudentRequest extends FormRequest
             'phone'         => 'nullable|string|max:20',
             'address'       => 'nullable|string|max:500',
             'date_of_birth' => 'nullable|date|date_format:Y-m-d|before:today',  // A date_format ellenőrzi hogy a dátum YYYY-MM-DD formátumú-e
-            'gender'        => 'nullable|in:male,femala,other',
+            'gender'        => 'nullable|in:male,female,other',
             'class_id'      => 'required|exists:classes,id', // Ellenőrzi, hogy a megadott class_id létezik-e a classes táblában.
         ];
     }
