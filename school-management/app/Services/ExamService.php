@@ -98,7 +98,7 @@ class ExamService
     public function getExamStatistics(Exam $exam): array
     {
         // a kapcsolattal lekérem az összes tanuló vizsgaeredményét.
-        $results = $exam->results();
+        $results = $exam->results;
 
         if ($results->isEmpty()) {
             return [

@@ -12,6 +12,9 @@ import SubjectListPage from "../pages/subjects/SubjectListPage";
 import SubjectFormPage from "../pages/subjects/SubjectFormPage";
 import AttendanceRecordPage from '../pages/attendance/AttendanceRecordPage';
 import TimetablePage from '../components/timetable/TimetablePage';
+import ExamListPage from '../pages/exams/ExamListPage';
+import ExamFormPage from '../pages/exams/ExamFormPage';
+import ExamResultsPage from '../pages/exams/ExamResultsPage';
 import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
@@ -78,14 +81,19 @@ export default function AppRoutes() {
                         path="/classes/:id/edit"
                         element={<SchoolClassFormPage />}
                     />
-                    
-                    <Route path="/subjects" element={<SubjectListPage/>} />
+
+                    <Route path="/subjects" element={<SubjectListPage />} />
                     <Route path="/subjects/create" element={<SubjectFormPage />} />
                     <Route path="/subjects/:id/edit" element={<SubjectFormPage />} />
 
                     <Route path="/attendances" element={<AttendanceRecordPage />} />
 
                     <Route path="/timetables" element={<TimetablePage />} />
+
+                    <Route path="/exams" element={<ExamListPage />} />
+                    <Route path="/exams/create" element={<ExamFormPage />} />
+                    <Route path="/exams/:id/edit" element={<ExamFormPage />} />
+                    <Route path="/exams/:id/results" element={<ExamResultsPage />} />
 
                 </Route>
 
