@@ -15,6 +15,9 @@ import TimetablePage from '../components/timetable/TimetablePage';
 import ExamListPage from '../pages/exams/ExamListPage';
 import ExamFormPage from '../pages/exams/ExamFormPage';
 import ExamResultsPage from '../pages/exams/ExamResultsPage';
+import FeeListPage from '../pages/fees/FeeListPage';
+import FeeFormPage from '../pages/fees/FeeFormPage';
+import OverdueFeesPage from '../pages/fees/OverdueFeesPage';
 import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
@@ -94,6 +97,11 @@ export default function AppRoutes() {
                     <Route path="/exams/create" element={<ExamFormPage />} />
                     <Route path="/exams/:id/edit" element={<ExamFormPage />} />
                     <Route path="/exams/:id/results" element={<ExamResultsPage />} />
+
+                    <Route path="/fees" element={<FeeListPage />} />
+                    <Route path="/fees/create" element={<FeeFormPage />} />
+                    <Route path="/fees/:id/edit" element={<FeeFormPage />} />
+                    <Route path="/fees/overdue" element={<OverdueFeesPage />} />
 
                 </Route>
 

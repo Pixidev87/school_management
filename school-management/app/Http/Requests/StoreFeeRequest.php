@@ -23,7 +23,7 @@ class StoreFeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id' => 'required|exists:student,id',
+            'student_id' => 'required|exists:students,id',
             'fee_type' => 'required|string|max:100',
             'amount' => 'required|numeric|min:0|decimal:0,2',
             'due_date' => 'required|date|date_format:Y-m-d',
