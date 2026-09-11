@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Library_book extends Model
+class LibraryBook extends Model
 {
     use SoftDeletes;
 
@@ -19,8 +19,8 @@ class Library_book extends Model
         'available_copies'
     ];
 
-    public function libraryIssues(): HasMany
+    public function issues(): HasMany
     {
-        return $this->hasMany(Library_issues::class);
+        return $this->hasMany(LibraryIssue::class, 'book_id');
     }
 }

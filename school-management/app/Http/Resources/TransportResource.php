@@ -8,8 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class TransportResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -21,9 +19,18 @@ class TransportResource extends JsonResource
             'driver_name' => $this->driver_name,
             'driver_phone' => $this->driver_phone,
             'capacity' => $this->capacity,
+            'stops_count' => $this->whenCounted('stops'),
+            'students_count' => $this->whenCounted('students'),
             'stops' => $this->whenLoaded('stops', function () {
                 return TransportStopResource::collection($this->stops);
             }),
+            'students' => $this->whenLoaded('students', function () {
+                return TransportStudentResource::collection($this->students);
+            }),
+            'is_full' => $this->when(
+                isset($this->students_count),
+                $this->students_count >= $this->capacity
+            ),
         ];
     }
 }

@@ -15,16 +15,16 @@ class Transport extends Model
         'vehicle_number',
         'driver_name',
         'driver_phone',
-        'capacity'
+        'capacity',
     ];
 
     public function stops(): HasMany
     {
-        return $this->hasMany(Transport_stops::class);
+        return $this->hasMany(TransportStop::class)->orderBy('order');
     }
 
     public function students(): HasMany
     {
-        return $this->hasMany(Transport_students::class);
+        return $this->hasMany(TransportStudent::class);
     }
 }

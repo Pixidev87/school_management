@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('library_issues', function (Blueprint $table) {
             $table->id();
-            $table->date('issues_date');
+            $table->date('issue_date');
             $table->date('due_date');
             $table->date('return_date')->nullable();
             $table->decimal('fine', 8, 2)->default(0.00); // ez a késedelmi dij része

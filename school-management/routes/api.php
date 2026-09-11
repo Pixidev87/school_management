@@ -127,6 +127,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Közlekedés..
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('transports', TransportController::class);
+        Route::post('transports/{id}/stops', [TransportController::class, 'storeStop'])->name('transports.stops.store');
+        Route::delete('transports/{id}/stops/{stopId}', [TransportController::class, 'destroyStop'])->name('transports.stops.destroy');
         Route::post('transports/{id}/assign', [TransportController::class, 'assignStudent'])->name('transports.assign');
         Route::delete('transports/{id}/remove/{studentId}', [TransportController::class, 'removeStudent'])->name('transports.remove');
     });

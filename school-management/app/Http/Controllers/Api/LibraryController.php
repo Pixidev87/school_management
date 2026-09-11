@@ -49,7 +49,7 @@ class LibraryController extends Controller
         $validated = $request->validate([
             'title'            => 'sometimes|required|string|max:255',
             'author'           => 'nullable|string|max:255',
-            'isbn'             => 'nullable|string|max:20|unique:library_books,isbn,' . $id,
+            'isbn'             => 'nullable|string|max:20|unique:libraryBooks,isbn,' . $id,
             'category'         => 'nullable|string|max:100',
             'total_copies'     => 'sometimes|required|integer|min:1',
             'available_copies' => 'sometimes|required|integer|min:0',

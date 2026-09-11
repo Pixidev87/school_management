@@ -18,6 +18,12 @@ import ExamResultsPage from '../pages/exams/ExamResultsPage';
 import FeeListPage from '../pages/fees/FeeListPage';
 import FeeFormPage from '../pages/fees/FeeFormPage';
 import OverdueFeesPage from '../pages/fees/OverdueFeesPage';
+import LibraryBookListPage from '../pages/library/LibraryBookListPage';
+import LibraryBookFormPage from '../pages/library/LibraryBookFormPage';
+import IssuesListPage from '../pages/library/IssuesListPage';
+import TransportListPage from '../pages/transport/TransportListPage';
+import TransportFormPage from '../pages/transport/TransportFormPage';
+import TransportDetailPage from '../pages/transport/TransportDetailPage';
 import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
@@ -102,6 +108,16 @@ export default function AppRoutes() {
                     <Route path="/fees/create" element={<FeeFormPage />} />
                     <Route path="/fees/:id/edit" element={<FeeFormPage />} />
                     <Route path="/fees/overdue" element={<OverdueFeesPage />} />
+
+                    <Route path="/library" element={<LibraryBookListPage />} />
+                    <Route path="/library/books/create" element={<LibraryBookFormPage />} />
+                    <Route path="/library/books/:id/edit" element={<LibraryBookFormPage />} />
+                    <Route path="/library/issues/:type" element={<IssuesListPage />} />
+
+                    <Route path="/transports" element={<TransportListPage />} />
+                    <Route path="/transports/create" element={<TransportFormPage />} />
+                    <Route path="/transports/:id" element={<TransportDetailPage />} />
+                    <Route path="/transports/:id/edit" element={<TransportFormPage />} />
 
                 </Route>
 

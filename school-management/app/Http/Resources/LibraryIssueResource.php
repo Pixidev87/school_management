@@ -16,7 +16,7 @@ class LibraryIssueResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'issues_date' => $this->issues_date->format('Y-m-d'),
+            'issue_date' => $this->issue_date->format('Y-m-d'),
             'due_date' => $this->due_date->format('Y-m-d'),
             'return_date' => $this->return_date?->format('Y-m-d'),
             'fine' => number_format($this->fine, 2, '.', ''),
@@ -24,7 +24,7 @@ class LibraryIssueResource extends JsonResource
             'book' => $this->whenLoaded('book', function () {
                 return [
                     'id' => $this->book->id,
-                    'name' => $this->book->name,
+                    'name' => $this->book->title,
                     'isbn' => $this->book->isbn,
                 ];
             }),

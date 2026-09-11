@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Transport_students extends Model
+class TransportStudent extends Model
 {
     protected $fillable = [
         'transport_id',
         'student_id',
-        'stop_id'
+        'stop_id',
     ];
 
     public function transport(): BelongsTo
@@ -25,6 +25,6 @@ class Transport_students extends Model
 
     public function stop(): BelongsTo
     {
-        return $this->belongsTo(Transport_stops::class, 'stop_id');
+        return $this->belongsTo(TransportStop::class, 'stop_id');
     }
 }
