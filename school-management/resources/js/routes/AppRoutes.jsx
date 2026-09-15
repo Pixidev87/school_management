@@ -24,6 +24,9 @@ import IssuesListPage from '../pages/library/IssuesListPage';
 import TransportListPage from '../pages/transport/TransportListPage';
 import TransportFormPage from '../pages/transport/TransportFormPage';
 import TransportDetailPage from '../pages/transport/TransportDetailPage';
+import NotificationListPage from '../pages/notifications/NotificationsListPage';
+import NotificationFormPage from '../pages/notifications/NotificationFormPage';
+import MyNotificationsPage from '../pages/notifications/MyNotificationsPage';
 import Layout from "../components/layout/Layout";
 
 function ProtectedRoute({ children }) {
@@ -118,6 +121,10 @@ export default function AppRoutes() {
                     <Route path="/transports/create" element={<TransportFormPage />} />
                     <Route path="/transports/:id" element={<TransportDetailPage />} />
                     <Route path="/transports/:id/edit" element={<TransportFormPage />} />
+
+                    <Route path="/notifications/my" element={<MyNotificationsPage />} />
+                    <Route path="/notifications/create" element={<NotificationFormPage />} />
+                    <Route path="/notifications" element={<NotificationListPage />} />
 
                 </Route>
 
